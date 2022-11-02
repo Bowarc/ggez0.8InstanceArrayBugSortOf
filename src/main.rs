@@ -86,6 +86,23 @@ impl ggez::event::EventHandler<ggez::GameError> for Testing {
 
         Ok(())
     }
+
+    fn key_down_event(
+        &mut self,
+        _ctx: &mut ggez::Context,
+        input: ggez::input::keyboard::KeyInput,
+        repeated: bool,
+    ) -> Result<(), ggez::GameError> {
+        if input.keycode == Some(ggez::input::keyboard::KeyCode::Space) && !repeated {
+            self.show_bug = !self.show_bug;
+
+            match self.show_bug {
+                true => println!("This is the actual ggez0.8 result"),
+                false => println!("This is what ggez0.7 would show"),
+            }
+        }
+        Ok(())
+    }
 }
 
 /// a way to render an a list of object to the screen
@@ -118,6 +135,7 @@ fn super_simple_render(
 }
 
 fn main() {
+    println!("Press [Space] to switch between the expected case and the actual result");
     let resource_dir = if let Ok(manifest_dir) = std::env::var("CARGO_MANIFEST_DIR") {
         let mut path = std::path::PathBuf::from(manifest_dir);
         path.push("resources");
